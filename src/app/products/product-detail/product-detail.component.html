@@ -1,0 +1,16 @@
+<!-- *ngIf="product != undefined" pareil que *ngIf="product" -->
+<div *ngIf="product">
+    <h2>{{product.name | uppercase}}</h2>
+    <button class="bouton" (click)="delete()">Delete </button>
+    <img style="float:right" [src]="product.imageUrl" *ngIf="product.imageUrl" width="250" />
+    <h3>{{product.description}}</h3>
+    <p>Price: {{product.price | currency:'CAD':'symbol-narrow':'.2'}}</p>
+    <p [hidden]="product.fixedPrice">
+        Edit price:
+        <input type="number" [(ngModel)]="product.price" [disabled]="product.fixedPrice">
+    </p>
+    <p>Fixed price? {{product.fixedPrice}}</p>
+    <p>Discontinued? <input type="checkbox" [(ngModel)]="product.discontinued"> </p>
+    <p>Modified date:
+        {{product.modifiedDate | date}}</p>
+</div>

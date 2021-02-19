@@ -1,0 +1,50 @@
+<h2>
+    {{ title }}
+</h2>
+
+<ng-template #loading>
+    <h2 class="loading">Loading products</h2>
+</ng-template>
+
+<!-- Cas d'erreur -->
+<div *ngIf="errorMesage" class="errorMessage">
+     {{ errorMesage }}
+</div>
+
+<!-- Cas success -->
+<div *ngIf="!errorMesage">
+    <!-- syntaxe if else  -->
+    <ul class="products" *ngIf="products$ | async as products;else loading">
+        <!-- ===:comparaison par référence -->
+        <!-- ?: aller a .name si selectedProduct est défini ! [class.selected]="selectedProduct?.name===pr.name"  -->
+        <li *ngFor="let pr of products | slice:start:end" 
+        [class.discontinued]="pr.discontinued"
+        [class.selected]="selectedProduct===pr" 
+        (click)="onSelect(pr)">
+            <span class="name">{{ pr.name | uppercase }}</span>
+            <span class="description">{{ pr.description }}</span>
+            <span class="price">{{ pr.price | currency:'CAD':'symbol-narrow':'.1-3'}}</span>
+        </li>
+    </ul>
+
+    <div class="right">
+        <!-- navigation relative !!, pas besoins de rajouter /products/insert -->
+        <a routerLink="insert">Add new product</a>
+    </div>
+
+    <div>
+        <button (click)="previousPage()" [disabled]="start==0">
+                < Previous Page
+        </button>
+        Page {{ currentPageNumber }}
+        <!-- PB: Appel du service unde 2eme fois --> 
+        <button (click)="nextPage()" [disabled]="(products$ | async)?.length<=end">
+                Next Page >
+        </button>
+        
+    </div>
+    
+    <!-- Show the detail here  -->
+    <app-product-detail [product]="selectedProduct"></app-product-detail>
+</div>
+
